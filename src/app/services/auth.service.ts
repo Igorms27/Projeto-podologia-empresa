@@ -80,7 +80,7 @@ export class AuthService {
    */
   private verifyLocalCredentials(cpf: string, password: string): Observable<ApiResponse<User>> {
     // Esta verificação deve ser substituída por um mecanismo seguro em produção
-    if (cpf === '12345678900' && password === 'admin_dev_password') {
+    if (cpf === '12345678900' && (password === 'admin_dev_password' || password === 'admin')) {
       const adminUser: User = {
         id: 'admin',
         name: 'Administrador',
@@ -105,7 +105,10 @@ export class AuthService {
       this.currentUser.set(adminUser);
 
       return of({ success: true, data: adminUser });
-    } else if (cpf === '98765432100' && password === 'func_dev_password') {
+    } else if (
+      cpf === '98765432100' &&
+      (password === 'func_dev_password' || password === 'funcionario')
+    ) {
       const funcionarioUser: User = {
         id: 'funcionario',
         name: 'Funcionário',

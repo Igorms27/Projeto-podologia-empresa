@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- Script injetado diretamente para garantir carregamento antes de tudo -->
     <script>
+      console.log('[DEBUG] Início do carregamento da página');
+
       // Configuração do Firebase para produção
       window.ENV = {
         FIREBASE_API_KEY: '__FIREBASE_API_KEY__',
@@ -17,8 +19,30 @@
         FIREBASE_APP_ID: '__FIREBASE_APP_ID__',
         FIREBASE_MEASUREMENT_ID: '__FIREBASE_MEASUREMENT_ID__',
       };
-      console.log('Firebase ENV configurado');
+
+      // Verificar valores carregados
+      console.log('[DEBUG] API Key carregada:', window.ENV.FIREBASE_API_KEY);
+      console.log('[DEBUG] Auth Domain carregado:', window.ENV.FIREBASE_AUTH_DOMAIN);
+      console.log('[DEBUG] Project ID carregado:', window.ENV.FIREBASE_PROJECT_ID);
+
+      // Verificar formato da API Key - não deve ter espaços extras ou aspas
+      if (
+        window.ENV.FIREBASE_API_KEY.includes(' ') ||
+        window.ENV.FIREBASE_API_KEY.includes('"') ||
+        window.ENV.FIREBASE_API_KEY.includes("'")
+      ) {
+        console.error('[DEBUG] ALERTA: API Key contém caracteres inválidos!');
+      }
+
+      // Verificar se é o placeholder ou valor real
+      if (window.ENV.FIREBASE_API_KEY === '__FIREBASE_API_KEY__') {
+        console.error('[DEBUG] ERRO: Placeholder não foi substituído!');
+      }
+
+      console.log('[DEBUG] Firebase ENV configurado');
     </script>
+    <!-- Script de depuração para o Firebase -->
+    <script src="firebase-debug.js"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap"
       rel="stylesheet"

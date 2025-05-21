@@ -29,6 +29,7 @@
             "assets": [
               "src/_redirects",
               "src/cloudflare-env.js",
+              "src/firebase-debug.js",
               {
                 "glob": "**/*",
                 "input": "src/assets/",

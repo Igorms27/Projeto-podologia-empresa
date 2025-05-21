@@ -38,19 +38,11 @@ O Sistema de Gerenciamento do Instituto dos Pés foi desenvolvido para otimizar 
 
 ![Clientes](src/assets/screenshots/clientes.png)
 
-## Equipe de Desenvolvimento
-
-- **Product Owner**: Instituto dos Pés
-- **Desenvolvimento e UX/UI**: Equipe de Engenharia de Software
-- **Suporte e Manutenção**: Equipe de TI
-
 ## Contato e Redes Sociais
 
-- **Website**: [Instituto dos Pés](https://institutodospes.com)
-- **Instagram**: [@institutodospes](https://instagram.com/institutodospes)
-- **Facebook**: [Instituto dos Pés](https://facebook.com/institutodospes)
-- **Email**: contato@institutodospes.com
-- **Telefone**: (11) 1234-5678
+- **Website**: [Instituto dos Pés](https://www.institutodospes.com.br/index.html)
+- **Instagram**: [@institutodospes](https://www.instagram.com/institutodospes/)
+- **Telefone**: (61) 3561-2289
 
 ## Direitos de Uso
 

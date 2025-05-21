@@ -28,6 +28,7 @@
           "options": {
             "assets": [
               "src/_redirects",
+              "src/cloudflare-env.js",
               {
                 "glob": "**/*",
                 "input": "src/assets/",

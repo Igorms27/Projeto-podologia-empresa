@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build && node cloudflare-build.js",
+    "build:cloudflare": "ng build --configuration production && node cloudflare-build.js",
     "lint": "eslint \"src/**/*.ts\" --fix",
     "lint:check": "eslint \"src/**/*.ts\"",
     "format": "prettier --write \"src/**/*.{ts,html,scss,json}\"",

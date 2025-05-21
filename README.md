@@ -1,94 +1,59 @@
-# Projeto Podologia
+# Instituto dos Pés - Sistema de Gerenciamento
 
-Sistema de gerenciamento para clínica de podologia desenvolvido com Angular.
+![Logo Instituto dos Pés](src/assets/logo.png)
 
-## Requisitos
+Sistema de gerenciamento completo para clínica de podologia, permitindo controle de agendamentos, clientes, pagamentos e relatórios.
 
-- Node.js (v14+)
-- Angular CLI (v13+)
-- Yarn ou NPM
+## Sobre o Sistema
 
-## Configuração Inicial
+O Sistema de Gerenciamento do Instituto dos Pés foi desenvolvido para otimizar todos os processos da clínica, garantindo maior produtividade e melhor experiência para clientes e profissionais.
 
-1. Clone o repositório:
+### Funcionalidades Principais
 
-```bash
-git clone https://github.com/seu-usuario/Projeto-podologia-empresa.git
-cd Projeto-podologia-empresa
-```
+- **Agenda inteligente** com controle de disponibilidade
+- **Cadastro de clientes** com histórico médico
+- **Gestão financeira** completa com relatórios
+- **Dashboard administrativo** com métricas e indicadores
+- **Controle de acesso** com diferentes perfis de usuário
+- **Interface responsiva** para uso em diversos dispositivos
 
-2. Instale as dependências:
+## Tecnologias Utilizadas
 
-```bash
-yarn install
-```
+- **Frontend**: Angular Material, TypeScript
+- **Backend**: Firebase (Firestore, Authentication)
+- **Hospedagem**: Cloudflare Pages
+- **Integração contínua**: GitHub Actions
 
-3. Configure as variáveis de ambiente:
-   - Copie o conteúdo do arquivo `src/environments/environment.ts` para um novo arquivo `src/environments/environment.local.ts`
-   - Preencha as informações do Firebase no arquivo `environment.local.ts`
+## Capturas de Tela
 
-## Desenvolvimento
+### Dashboard Administrativo
 
-Para iniciar o servidor de desenvolvimento:
+![Dashboard](src/assets/screenshots/administrativo.png)
 
-```bash
-yarn start
-```
+### Agenda
 
-O aplicativo estará disponível em `http://localhost:4200/`.
+![Agenda](src/assets/screenshots/agenda.png)
 
-## Build
+### Cadastro de Clientes
 
-Para gerar uma versão de produção:
+![Clientes](src/assets/screenshots/clientes.png)
 
-```bash
-yarn build:cloudflare
-```
+## Equipe de Desenvolvimento
 
-Os arquivos serão gerados na pasta `dist/demo/`.
+- **Product Owner**: Instituto dos Pés
+- **Desenvolvimento e UX/UI**: Equipe de Engenharia de Software
+- **Suporte e Manutenção**: Equipe de TI
 
-## Deploy na Cloudflare Pages
+## Contato e Redes Sociais
 
-### Configuração na Cloudflare:
+- **Website**: [Instituto dos Pés](https://institutodospes.com)
+- **Instagram**: [@institutodospes](https://instagram.com/institutodospes)
+- **Facebook**: [Instituto dos Pés](https://facebook.com/institutodospes)
+- **Email**: contato@institutodospes.com
+- **Telefone**: (11) 1234-5678
 
-1. No dashboard da Cloudflare, acesse "Pages"
-2. Clique em "Create a project" e selecione "Connect to Git"
-3. Escolha o repositório e configure o build:
+## Direitos de Uso
 
-   - Framework preset: Angular
-   - Build command: `yarn build:cloudflare`
-   - Build output directory: `dist/demo`
+O sistema foi desenvolvido exclusivamente para o Instituto dos Pés. Todos os direitos reservados.
 
-4. Na seção "Environment variables", adicione as variáveis do Firebase:
-
-   ```
-   FIREBASE_API_KEY
-   FIREBASE_AUTH_DOMAIN
-   FIREBASE_PROJECT_ID
-   FIREBASE_STORAGE_BUCKET
-   FIREBASE_MESSAGING_SENDER_ID
-   FIREBASE_APP_ID
-   FIREBASE_MEASUREMENT_ID
-   ```
-
-5. Clique em "Save and Deploy"
-
-### Atualizando o deploy:
-
-Após fazer alterações, basta fazer commit e push para o GitHub. A Cloudflare fará automaticamente o deploy da nova versão.
-
-## Segurança
-
-Este projeto segue as seguintes práticas de segurança:
-
-1. Não armazena chaves de API diretamente no código-fonte
-2. Utiliza variáveis de ambiente para informações sensíveis
-3. Implementa controle de acesso baseado em papéis
-4. Protege rotas com guards
-
-## Estrutura do Projeto
-
-- `/src/app/admin` - Módulo administrativo
-- `/src/app/auth` - Autenticação
-- `/src/app/core` - Serviços e componentes principais
-- `/src/app/shared` - Componentes, pipes e utilitários compartilhados
+&copy; 2025 Instituto dos Pés. Todos os direitos reservados.

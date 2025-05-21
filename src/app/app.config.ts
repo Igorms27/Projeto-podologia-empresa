@@ -48,12 +48,26 @@ export const BRAZILIAN_DATE_FORMATS = {
 export function initializeFirebaseFactory(): () => Promise<FirebaseApp> {
   return () => {
     console.log('[APP_INITIALIZER] Attempting to initialize Firebase...');
-    console.log('[APP_INITIALIZER] Firebase config:', JSON.stringify(environment.firebase));
+
+    // Usar diretamente as variáveis de window.ENV em vez do environment
+    const firebaseConfig = {
+      apiKey: window.ENV?.FIREBASE_API_KEY || environment.firebase.apiKey,
+      authDomain: window.ENV?.FIREBASE_AUTH_DOMAIN || environment.firebase.authDomain,
+      projectId: window.ENV?.FIREBASE_PROJECT_ID || environment.firebase.projectId,
+      storageBucket: window.ENV?.FIREBASE_STORAGE_BUCKET || environment.firebase.storageBucket,
+      messagingSenderId:
+        window.ENV?.FIREBASE_MESSAGING_SENDER_ID || environment.firebase.messagingSenderId,
+      appId: window.ENV?.FIREBASE_APP_ID || environment.firebase.appId,
+      measurementId: window.ENV?.FIREBASE_MEASUREMENT_ID || environment.firebase.measurementId,
+    };
+
+    console.log('[APP_INITIALIZER] Firebase config:', JSON.stringify(firebaseConfig));
+
     return new Promise((resolve, reject) => {
       try {
         // Tenta obter o app [DEFAULT] para ver se já foi inicializado por algum motivo.
         // Se já existir, initializeApp com a mesma config é um no-op e retorna a instância existente.
-        const app = initializeApp(environment.firebase);
+        const app = initializeApp(firebaseConfig);
         console.log(
           '[APP_INITIALIZER] Firebase initialized successfully via initializeApp(). App instance:',
           app

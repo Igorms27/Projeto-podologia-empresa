@@ -62,16 +62,21 @@ export class AuthService {
     const normalizedCpf = cpf.replace(/\D/g, '');
 
     this.logger.debug(`Tentativa de login - CPF: ${normalizedCpf}, Senha: ***********`);
+    console.log(
+      `[AUTH] Tentativa de login - CPF: ${normalizedCpf}, Senha utilizada: ${password.substring(0, 3)}...`
+    );
 
-    // Em produção, isso deve vir de um banco de dados seguro ou serviço de autenticação
-    // Esta é uma implementação temporária para desenvolvimento
-    if (!this.firestore) {
-      // Verificar mapeamento local de usuários para desenvolvimento
-      return this.verifyLocalCredentials(normalizedCpf, password);
-    }
+    // Para fins de depuração, sempre usar verificação local
+    return this.verifyLocalCredentials(normalizedCpf, password);
 
-    // Implementar lógica real de autenticação com Firebase
-    return this.verifyFirebaseCredentials(normalizedCpf, password);
+    // Comentado temporariamente para diagnóstico
+    // if (!this.firestore) {
+    //   // Verificar mapeamento local de usuários para desenvolvimento
+    //   return this.verifyLocalCredentials(normalizedCpf, password);
+    // }
+
+    // // Implementar lógica real de autenticação com Firebase
+    // return this.verifyFirebaseCredentials(normalizedCpf, password);
   }
 
   /**
@@ -80,7 +85,16 @@ export class AuthService {
    */
   private verifyLocalCredentials(cpf: string, password: string): Observable<ApiResponse<User>> {
     // Esta verificação deve ser substituída por um mecanismo seguro em produção
+    console.log(
+      `[AUTH] Verificando credenciais - CPF: ${cpf}, Senha: ${password.substring(0, 3)}...`
+    );
+    console.log(
+      `[AUTH] Condição admin: (${cpf === '12345678900'} && (${password === 'admin_dev_password'} || ${password === 'admin'}))`
+    );
+
     if (cpf === '12345678900' && (password === 'admin_dev_password' || password === 'admin')) {
+      console.log('[AUTH] Autenticação bem-sucedida como administrador');
+
       const adminUser: User = {
         id: 'admin',
         name: 'Administrador',
@@ -109,6 +123,8 @@ export class AuthService {
       cpf === '98765432100' &&
       (password === 'func_dev_password' || password === 'funcionario')
     ) {
+      console.log('[AUTH] Autenticação bem-sucedida como funcionário');
+
       const funcionarioUser: User = {
         id: 'funcionario',
         name: 'Funcionário',
@@ -135,6 +151,7 @@ export class AuthService {
       return of({ success: true, data: funcionarioUser });
     }
 
+    console.log('[AUTH] Autenticação falhou - usuário não autorizado');
     this.logger.warn(`Tentativa de login não autorizada. CPF não reconhecido: ${cpf}`);
     return throwError(() => new Error('Usuário não autorizado'));
   }

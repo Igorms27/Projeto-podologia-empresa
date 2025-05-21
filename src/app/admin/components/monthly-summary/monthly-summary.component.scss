@@ -1,0 +1,129 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0;
+  }
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.summary-card {
+  margin-bottom: 20px;
+}
+
+.total-income-card {
+  background: #e8f5e9;
+}
+
+.total-income-content {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+
+  mat-icon {
+    color: #388e3c;
+    margin-right: 15px;
+    font-size: 32px;
+    height: 32px;
+    width: 32px;
+  }
+
+  .total-income-text {
+    display: flex;
+    flex-direction: column;
+
+    .total-income-value {
+      font-size: 28px;
+      font-weight: 500;
+      color: #388e3c;
+    }
+  }
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.podologist-total {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 15px 0;
+}
+
+.no-data {
+  text-align: center;
+  padding: 40px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  margin: 20px 0;
+}
+
+.stats-section {
+  margin-top: 30px;
+}
+
+/* Estilos para os procedimentos */
+.procedures-section {
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #e0e0e0;
+
+  h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #555;
+  }
+}
+
+.procedures-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.procedure-item {
+  display: flex;
+  align-items: center;
+  background-color: #f0f0f0;
+  padding: 6px 10px;
+  border-radius: 15px;
+  font-size: 14px;
+
+  .procedure-abbr {
+    font-weight: bold;
+    color: #3f51b5;
+    margin-right: 5px;
+  }
+
+  .procedure-count {
+    margin-right: 5px;
+    font-weight: 500;
+  }
+
+  .procedure-name {
+    color: #666;
+    max-width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

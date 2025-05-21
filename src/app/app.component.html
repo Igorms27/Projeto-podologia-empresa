@@ -1,0 +1,94 @@
+<mat-toolbar class="toolbar custom-toolbar">
+  <button mat-icon-button (click)="toggleSidenav()" class="menu-button">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <div class="logo-container">
+    <button mat-button (click)="navigateToHome()" class="site-title">
+      <span>Instituto dos Pés</span>
+      @if (isAuthenticated()) {
+        <span class="user-role-indicator">
+          @if (isAdmin()) {
+            <small>| ADMIN</small>
+          } @else if (isFuncionario()) {
+            <small>| FUNCIONÁRIO</small>
+          }
+        </span>
+      }
+    </button>
+  </div>
+  <span class="spacer"></span>
+  <div class="desktop-menu">
+    @if (isAuthenticated()) {
+      <button mat-button (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        Sair
+      </button>
+    }
+  </div>
+</mat-toolbar>
+
+<mat-sidenav-container>
+  <mat-sidenav #sidenav mode="over" class="sidenav">
+    <div class="sidenav-content">
+      @if (isAuthenticated()) {
+        <!-- Menu do Administrador -->
+        @if (isAdmin()) {
+          <div class="admin-section">
+            <h3 class="admin-section-title">Administração</h3>
+            <a mat-button routerLink="/admin/dashboard" (click)="sidenav.close()">
+              <mat-icon>admin_panel_settings</mat-icon>
+              Painel Admin
+            </a>
+            <a mat-button routerLink="/admin/holidays" (click)="sidenav.close()">
+              <mat-icon>event_busy</mat-icon>
+              Gerenciar Feriados
+            </a>
+            <a mat-button routerLink="/admin/cashier" (click)="sidenav.close()">
+              <mat-icon>point_of_sale</mat-icon>
+              Caixa
+            </a>
+            <a mat-button routerLink="/admin/agenda" (click)="sidenav.close()">
+              <mat-icon>calendar_today</mat-icon>
+              Agenda
+            </a>
+            <a mat-button routerLink="/admin/register-client" (click)="sidenav.close()">
+              <mat-icon>person_add</mat-icon>
+              Registrar Cliente
+            </a>
+          </div>
+          <mat-divider></mat-divider>
+        }
+        <!-- Menu do Funcionário -->
+        @if (isFuncionario()) {
+          <div class="admin-section">
+            <h3 class="admin-section-title">Funcionário</h3>
+            <a mat-button routerLink="/admin/dashboard" (click)="sidenav.close()">
+              <mat-icon>dashboard</mat-icon>
+              Painel Principal
+            </a>
+            <a mat-button routerLink="/admin/agenda" (click)="sidenav.close()">
+              <mat-icon>calendar_today</mat-icon>
+              Agenda
+            </a>
+            <a mat-button routerLink="/admin/register-client" (click)="sidenav.close()">
+              <mat-icon>person_add</mat-icon>
+              Registrar Cliente
+            </a>
+            <a mat-button routerLink="/admin/holidays" (click)="sidenav.close()">
+              <mat-icon>event_busy</mat-icon>
+              Gerenciar Feriados
+            </a>
+          </div>
+          <mat-divider></mat-divider>
+        }
+        <a mat-button (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+          Sair
+        </a>
+      }
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content class="main-content">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

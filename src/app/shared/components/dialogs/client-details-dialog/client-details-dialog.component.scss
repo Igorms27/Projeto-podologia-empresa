@@ -1,0 +1,183 @@
+mat-dialog-content {
+  min-height: 400px;
+  max-height: 70vh;
+  width: 800px;
+  max-width: 100%;
+}
+
+h2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.tab-content {
+  padding: 20px 10px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.form-row mat-form-field {
+  flex: 1;
+}
+
+.form-actions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+  
+  button {
+    transition: all 0.3s ease;
+    
+    &:not([disabled]) {
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+      
+      &:active {
+        transform: translateY(0);
+      }
+      
+      &.saving {
+        background-color: #3f51b5; /* Cor primária do Angular Material */
+        animation: pulse 1.5s infinite;
+      }
+    }
+    
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(63, 81, 181, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(63, 81, 181, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(63, 81, 181, 0);
+  }
+}
+
+.info-section {
+  margin-top: 24px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 12px;
+  color: #666;
+}
+
+.value {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.checkbox-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.procedures-section, .appointments-section {
+  margin: 20px 0;
+}
+
+.procedures-header, .appointments-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.counter {
+  background-color: #f0f0f0;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.procedures-table, .appointments-table {
+  width: 100%;
+  margin-top: 16px;
+}
+
+.no-procedures, .no-appointments {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  color: #888;
+}
+
+.no-procedures mat-icon, .no-appointments mat-icon {
+  font-size: 48px;
+  height: 48px;
+  width: 48px;
+  margin-bottom: 16px;
+}
+
+[class^="status-"] {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.status-agendado {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.status-confirmado {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-cancelado {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.status-finalizado {
+  background-color: #e0f2f1;
+  color: #00695c;
+}
+
+.status-no-show {
+  background-color: #fafafa;
+  color: #757575;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px;
+  border-top: 1px solid #e0e0e0;
+} 

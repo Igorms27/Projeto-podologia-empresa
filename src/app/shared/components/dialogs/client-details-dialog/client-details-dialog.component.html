@@ -1,0 +1,161 @@
+<h2 mat-dialog-title>
+  <span>Detalhes do Cliente</span>
+  <button mat-icon-button class="close-button" (click)="close()">
+    <mat-icon>close</mat-icon>
+  </button>
+</h2>
+
+<mat-dialog-content>
+  <mat-tab-group [selectedIndex]="selectedTabIndex" animationDuration="300ms">
+    <!-- Aba de Informações Pessoais -->
+    <mat-tab label="Informações Pessoais">
+      <div class="tab-content">
+        <form [formGroup]="personalInfoForm">
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Nome Completo</mat-label>
+              <input matInput formControlName="name" />
+              <mat-error *ngIf="personalInfoForm.get('name')?.hasError('required')"
+                >Nome é obrigatório</mat-error
+              >
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>CPF</mat-label>
+              <input matInput formControlName="cpf" mask="000.000.000-00" />
+              <mat-error *ngIf="personalInfoForm.get('cpf')?.hasError('required')"
+                >CPF é obrigatório</mat-error
+              >
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Email (opcional)</mat-label>
+              <input matInput formControlName="email" type="email" />
+              <mat-error *ngIf="personalInfoForm.get('email')?.hasError('email')"
+                >Email inválido</mat-error
+              >
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Telefone</mat-label>
+              <input matInput formControlName="phone" mask="(00) 00000-0000" />
+              <mat-error *ngIf="personalInfoForm.get('phone')?.hasError('required')"
+                >Telefone é obrigatório</mat-error
+              >
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Data de Nascimento</mat-label>
+              <input matInput [matDatepicker]="birthDatePicker" formControlName="birthDate" />
+              <mat-datepicker-toggle matIconSuffix [for]="birthDatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #birthDatePicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Endereço</mat-label>
+              <input matInput formControlName="address" />
+            </mat-form-field>
+
+            <!-- Adicionar campo CEP -->
+            <mat-form-field appearance="outline">
+              <mat-label>CEP</mat-label>
+              <input matInput formControlName="zipCode" mask="00000-000" />
+            </mat-form-field>
+          </div>
+
+          <div class="form-actions">
+            <button
+              mat-raised-button
+              color="primary"
+              [disabled]="personalInfoForm.invalid || !personalInfoForm.dirty"
+              (click)="savePersonalInfo()"
+              [class.mat-elevation-z2]="!personalInfoForm.invalid && personalInfoForm.dirty"
+              matRipple
+            >
+              <mat-icon>save</mat-icon>
+              Salvar Alterações
+            </button>
+          </div>
+        </form>
+
+        <mat-divider></mat-divider>
+
+        <div class="info-section">
+          <h3>Informações do Registro</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Data de Cadastro:</span>
+              <span class="value">{{ client.registrationDate | date: 'dd/MM/yyyy' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Última Modificação:</span>
+              <span class="value">{{
+                client.lastModified ? (client.lastModified | date: 'dd/MM/yyyy HH:mm') : 'Nunca'
+              }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">ID do Cliente:</span>
+              <span class="value">{{ client.id }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- Aba de Informações Médicas -->
+    <mat-tab label="Informações Médicas">
+      <div class="tab-content">
+        <form [formGroup]="medicalInfoForm">
+          <h3>Condições Médicas</h3>
+
+          <div class="checkbox-group">
+            <mat-checkbox formControlName="diabetes">Diabetes</mat-checkbox>
+            <mat-checkbox formControlName="hypertension">Hipertensão</mat-checkbox>
+            <mat-checkbox formControlName="vascularDisease">Doença Vascular</mat-checkbox>
+            <mat-checkbox formControlName="renalInsufficiency">Insuficiência Renal</mat-checkbox>
+            <mat-checkbox formControlName="hematologicDisorders"
+              >Distúrbios Hematológicos</mat-checkbox
+            >
+            <mat-checkbox formControlName="chemicalAllergies">Alergias Químicas</mat-checkbox>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Anotações sobre o Cliente</mat-label>
+            <textarea
+              matInput
+              formControlName="clientNotes"
+              rows="5"
+              placeholder="Inclua quaisquer informações relevantes sobre o cliente, alergias, medicações em uso, etc."
+            ></textarea>
+          </mat-form-field>
+
+          <div class="form-actions">
+            <button
+              mat-raised-button
+              color="primary"
+              [disabled]="medicalInfoForm.invalid || !medicalInfoForm.dirty"
+              (click)="saveMedicalInfo()"
+              [class.mat-elevation-z2]="!medicalInfoForm.invalid && medicalInfoForm.dirty"
+              matRipple
+            >
+              <mat-icon>save</mat-icon>
+              Salvar Informações Médicas
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</mat-dialog-content>
+
+<!-- Botões de ação -->
+<div class="dialog-actions">
+  <button mat-button (click)="close()">
+    <mat-icon>close</mat-icon>
+    Fechar
+  </button>
+</div>

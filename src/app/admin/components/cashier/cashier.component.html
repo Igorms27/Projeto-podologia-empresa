@@ -1,0 +1,250 @@
+<div class="container">
+  <h1>Controle de Caixa</h1>
+
+  <!-- Seletor de data -->
+  <mat-card class="date-selector-card">
+    <mat-card-content>
+      <div class="date-selection-container">
+        <mat-form-field appearance="outline">
+          <mat-label>Selecione a data</mat-label>
+          <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" (click)="onDateChange()">
+          <mat-icon>refresh</mat-icon> Atualizar
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Sumário do dia -->
+  <mat-card class="summary-card" *ngIf="dailyReport">
+    <mat-card-header>
+      <mat-card-title class="summary-title"
+        >Resumo do Caixa - {{ dailyReport.date }}</mat-card-title
+      >
+    </mat-card-header>
+    <mat-card-content>
+      <div class="summary-content">
+        <div class="summary-item income">
+          <div class="summary-label">
+            <mat-icon>arrow_upward</mat-icon>
+            <span>Total de receitas</span>
+          </div>
+          <div class="summary-value">R$ {{ dailyReport.totalIncome | number: '1.2-2' }}</div>
+        </div>
+
+        <div class="summary-item expense">
+          <div class="summary-label">
+            <mat-icon>arrow_downward</mat-icon>
+            <span>Total de despesas</span>
+          </div>
+          <div class="summary-value">R$ {{ dailyReport.totalExpense | number: '1.2-2' }}</div>
+        </div>
+
+        <div
+          class="summary-item balance"
+          [ngClass]="dailyReport.balance >= 0 ? 'positive' : 'negative'"
+        >
+          <div class="summary-label">
+            <mat-icon>account_balance</mat-icon>
+            <span>Saldo do dia</span>
+          </div>
+          <div class="summary-value">R$ {{ dailyReport.balance | number: '1.2-2' }}</div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Sem dados -->
+  <div *ngIf="!dailyReport" class="no-data">
+    <p>Selecione uma data e clique em "Atualizar" para ver os dados do caixa.</p>
+  </div>
+
+  <!-- Estatísticas de pagamento -->
+  <div class="stats-section" *ngIf="dailyReport">
+    <h3>Resumo por Método de Pagamento</h3>
+    <div class="card-grid">
+      <!-- Dinheiro -->
+      <mat-card>
+        <mat-card-header>
+          <div mat-card-avatar>
+            <mat-icon>money</mat-icon>
+          </div>
+          <mat-card-title>Dinheiro</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <h2>R$ {{ dailyReport.cashTotal | number: '1.2-2' }}</h2>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- PIX -->
+      <mat-card>
+        <mat-card-header>
+          <div mat-card-avatar>
+            <mat-icon>phone_iphone</mat-icon>
+          </div>
+          <mat-card-title>PIX</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <h2>R$ {{ dailyReport.pixTotal | number: '1.2-2' }}</h2>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Cartão -->
+      <mat-card>
+        <mat-card-header>
+          <div mat-card-avatar>
+            <mat-icon>credit_card</mat-icon>
+          </div>
+          <mat-card-title>Cartão</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <h2>R$ {{ dailyReport.cardTotal | number: '1.2-2' }}</h2>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Resumo por podóloga -->
+  <div class="stats-section" *ngIf="dailyReport && dailyReport.podologistStats.length > 0">
+    <h3>Faturamento por Podóloga</h3>
+    <div class="card-grid">
+      <mat-card *ngFor="let stats of dailyReport.podologistStats">
+        <mat-card-header>
+          <div mat-card-avatar>
+            <mat-icon>person</mat-icon>
+          </div>
+          <mat-card-title>{{ stats.nome }}</mat-card-title>
+          <mat-card-subtitle>{{ stats.count }} atendimento(s)</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="stats-content">
+            <div class="total-value">
+              <span class="label">Total:</span>
+              <span class="value">R$ {{ stats.total | number: '1.2-2' }}</span>
+            </div>
+            <div class="payment-details">
+              <div class="payment-method">
+                <mat-icon>money</mat-icon>
+                <span>Dinheiro: R$ {{ stats.cashTotal | number: '1.2-2' }}</span>
+              </div>
+              <div class="payment-method">
+                <mat-icon>phone_iphone</mat-icon>
+                <span>PIX: R$ {{ stats.pixTotal | number: '1.2-2' }}</span>
+              </div>
+              <div class="payment-method">
+                <mat-icon>credit_card</mat-icon>
+                <span>Cartão: R$ {{ stats.cardTotal | number: '1.2-2' }}</span>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Lista de transações -->
+  <div class="transaction-list" *ngIf="dailyReport">
+    <!-- Receitas -->
+    <div class="transaction-type">
+      <h3 class="transaction-type-header">Receitas ({{ dailyReport.incomes.length }})</h3>
+      <div *ngIf="dailyReport.incomes.length === 0" class="no-transactions">
+        Nenhuma receita registrada para este período.
+      </div>
+      <mat-card *ngFor="let income of dailyReport.incomes" class="transaction-card income">
+        <mat-card-header class="transaction-header">
+          <mat-card-title>{{ income.description }}</mat-card-title>
+          <span class="transaction-amount income">R$ {{ income.amount | number: '1.2-2' }}</span>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="transaction-details">
+            <div class="detail-item">
+              <mat-icon>event</mat-icon>
+              <span>{{ income.date | date: 'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+            <div class="detail-item" *ngIf="income.clientName">
+              <mat-icon>person</mat-icon>
+              <span>{{ income.clientName }}</span>
+            </div>
+            <div class="detail-item" *ngIf="income.podologaNome">
+              <mat-icon>medical_services</mat-icon>
+              <span>{{ income.podologaNome }}</span>
+            </div>
+            <div class="detail-item" *ngIf="income.paymentMethod">
+              <mat-icon>
+                {{
+                  income.paymentMethod === 'dinheiro'
+                    ? 'money'
+                    : income.paymentMethod === 'pix'
+                      ? 'phone_iphone'
+                      : 'credit_card'
+                }}
+              </mat-icon>
+              <span>
+                {{
+                  income.paymentMethod === 'dinheiro'
+                    ? 'Dinheiro'
+                    : income.paymentMethod === 'pix'
+                      ? 'PIX'
+                      : 'Cartão'
+                }}
+              </span>
+            </div>
+            <div
+              class="detail-item"
+              *ngIf="income.procedureNames && income.procedureNames.length > 0"
+            >
+              <mat-icon>assignment</mat-icon>
+              <span>{{ income.procedureNames.join(', ') }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Despesas -->
+    <div class="transaction-type">
+      <h3 class="transaction-type-header">Despesas ({{ dailyReport.expenses.length }})</h3>
+      <div *ngIf="dailyReport.expenses.length === 0" class="no-transactions">
+        Nenhuma despesa registrada para este período.
+      </div>
+      <mat-card *ngFor="let expense of dailyReport.expenses" class="transaction-card expense">
+        <mat-card-header class="transaction-header">
+          <mat-card-title>{{ expense.description }}</mat-card-title>
+          <span class="transaction-amount expense">R$ {{ expense.amount | number: '1.2-2' }}</span>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="transaction-details">
+            <div class="detail-item">
+              <mat-icon>event</mat-icon>
+              <span>{{ expense.date | date: 'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+            <div class="detail-item" *ngIf="expense.paymentMethod">
+              <mat-icon>
+                {{
+                  expense.paymentMethod === 'dinheiro'
+                    ? 'money'
+                    : expense.paymentMethod === 'pix'
+                      ? 'phone_iphone'
+                      : 'credit_card'
+                }}
+              </mat-icon>
+              <span>
+                {{
+                  expense.paymentMethod === 'dinheiro'
+                    ? 'Dinheiro'
+                    : expense.paymentMethod === 'pix'
+                      ? 'PIX'
+                      : 'Cartão'
+                }}
+              </span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

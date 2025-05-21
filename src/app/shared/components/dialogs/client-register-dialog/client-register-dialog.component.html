@@ -1,0 +1,154 @@
+<h2 mat-dialog-title>Cadastrar Novo Cliente</h2>
+
+<mat-dialog-content>
+  <div class="dialog-content">
+    <mat-tab-group>
+      <!-- Aba de Informações Pessoais -->
+      <mat-tab label="Informações Pessoais">
+        <form [formGroup]="personalInfoForm" class="form-container">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nome Completo</mat-label>
+            <input matInput formControlName="name" placeholder="Digite o nome completo" required />
+            <mat-error *ngIf="personalInfoForm.get('name')?.hasError('required')">
+              Nome é obrigatório
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>CPF</mat-label>
+            <input
+              matInput
+              formControlName="cpf"
+              placeholder="000.000.000-00"
+              mask="000.000.000-00"
+              required
+            />
+            <mat-error *ngIf="personalInfoForm.get('cpf')?.hasError('required')">
+              CPF é obrigatório
+            </mat-error>
+          </mat-form-field>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>E-mail</mat-label>
+              <input
+                matInput
+                formControlName="email"
+                placeholder="exemplo@email.com"
+                type="email"
+              />
+              <mat-error *ngIf="personalInfoForm.get('email')?.hasError('email')">
+                Formato de e-mail inválido
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Telefone</mat-label>
+              <input
+                matInput
+                formControlName="phone"
+                placeholder="(00) 00000-0000"
+                mask="(00) 00000-0000"
+                required
+              />
+              <mat-error *ngIf="personalInfoForm.get('phone')?.hasError('required')">
+                Telefone é obrigatório
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Data de Nascimento</mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker"
+                formControlName="birthDate"
+                placeholder="DD/MM/AAAA"
+              />
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>CEP</mat-label>
+              <input matInput formControlName="zipCode" placeholder="00000-000" mask="00000-000" />
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Endereço</mat-label>
+            <input matInput formControlName="address" placeholder="Digite o endereço completo" />
+          </mat-form-field>
+        </form>
+      </mat-tab>
+
+      <!-- Aba de Informações Médicas -->
+      <mat-tab label="Informações Médicas">
+        <form [formGroup]="medicalInfoForm" class="form-container">
+          <div class="medical-conditions">
+            <h3>Condições Médicas</h3>
+
+            <div class="condition-row">
+              <mat-checkbox formControlName="diabetes" color="primary"> Diabetes </mat-checkbox>
+            </div>
+
+            <div class="condition-row">
+              <mat-checkbox formControlName="hypertension" color="primary">
+                Hipertensão
+              </mat-checkbox>
+            </div>
+
+            <div class="condition-row">
+              <mat-checkbox formControlName="vascularDisease" color="primary">
+                Doença Vascular
+              </mat-checkbox>
+            </div>
+
+            <div class="condition-row">
+              <mat-checkbox formControlName="renalInsufficiency" color="primary">
+                Insuficiência Renal
+              </mat-checkbox>
+            </div>
+
+            <div class="condition-row">
+              <mat-checkbox formControlName="hematologicDisorders" color="primary">
+                Distúrbios Hematológicos
+              </mat-checkbox>
+            </div>
+
+            <div class="condition-row">
+              <mat-checkbox formControlName="chemicalAllergies" color="primary">
+                Alergias a Produtos Químicos
+              </mat-checkbox>
+            </div>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Descrição das Alergias/Observações</mat-label>
+            <textarea
+              matInput
+              formControlName="allergiesDescription"
+              placeholder="Descreva as alergias ou outras observações médicas relevantes"
+              rows="3"
+            ></textarea>
+          </mat-form-field>
+        </form>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="loading">Cancelar</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onSubmit()"
+    [disabled]="personalInfoForm.invalid || loading"
+  >
+    <mat-icon>save</mat-icon>
+    <span *ngIf="!loading">Cadastrar</span>
+    <span *ngIf="loading">Cadastrando...</span>
+  </button>
+</mat-dialog-actions>

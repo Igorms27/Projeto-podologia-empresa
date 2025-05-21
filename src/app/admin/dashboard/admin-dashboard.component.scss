@@ -1,0 +1,494 @@
+.admin-dashboard-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  font-family: 'Roboto', sans-serif;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 500;
+    color: #2c3e50;
+  }
+
+  .header-actions {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    display: flex;
+    gap: 10px;
+
+    button {
+      mat-icon {
+        margin-right: 6px;
+      }
+    }
+  }
+}
+
+// Card de busca e filtros
+.search-card,
+.appointments-filter-card {
+  margin-bottom: 20px;
+  border-radius: 8px;
+  position: relative;
+
+  .search-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    .search-input {
+      width: 100%;
+    }
+
+    .filter-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+
+      mat-form-field {
+        flex: 1;
+        min-width: 200px;
+      }
+    }
+
+    .date-range-filter {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-items: center;
+
+      mat-form-field {
+        flex: 1;
+        min-width: 150px;
+      }
+
+      button {
+        height: 56px;
+      }
+    }
+  }
+}
+
+.appointments-filter-card {
+  margin-bottom: 16px;
+}
+
+.search-container {
+  margin-bottom: 16px;
+}
+
+.search-field {
+  width: 100%;
+}
+
+// Estilo para tabelas
+.clients-table-container,
+.appointments-table-container {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+
+  .clients-table,
+  .appointments-table {
+    width: 100%;
+  }
+
+  th {
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 14px;
+  }
+
+  .mat-column-actions {
+    width: 60px;
+    text-align: center;
+  }
+}
+
+// Contagem de resultados
+.results-count {
+  font-size: 14px;
+  margin: 10px 0;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+// Estilos para mensagem de "nenhum resultado"
+.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+
+  mat-icon {
+    font-size: 64px;
+    height: 64px;
+    width: 64px;
+    color: rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    font-size: 24px;
+    margin: 0 0 10px;
+  }
+
+  p {
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.6);
+    max-width: 400px;
+    margin: 0 0 20px;
+  }
+}
+
+// Estilos para tags de condições médicas
+.medical-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+
+  .medical-tag {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    background-color: #f0f0f0;
+    color: #555;
+
+    &.allergies {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+  }
+}
+
+// Estilos para ícones de alerta
+.warning-icon {
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+  vertical-align: middle;
+  color: #ff9800;
+  margin-left: 5px;
+}
+
+// Ícone de perfil recentemente modificado
+.recent-change {
+  display: inline-flex;
+  align-items: center;
+}
+
+// Informação de quem modificou o perfil
+.modifier-info {
+  display: block;
+  margin-top: 2px;
+
+  small {
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 11px;
+    background-color: #f1f1f1;
+    padding: 1px 6px;
+    border-radius: 10px;
+  }
+}
+
+// Estilos específicos para agendamentos
+.appointments-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 10px;
+  align-items: center;
+
+  .mat-button-toggle-group {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .filter-toggle {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    background-color: #f5f5f5;
+
+    mat-icon {
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+
+    &.mat-button-toggle-checked {
+      background-color: #e3f2fd;
+      color: #1976d2;
+    }
+  }
+
+  .date-filter-container {
+    min-width: 150px;
+    max-width: 200px;
+
+    mat-form-field {
+      width: 100%;
+    }
+  }
+}
+
+// Estilo para a lista de procedimentos
+.procedures-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  .procedure-item {
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 250px;
+  }
+}
+
+// Estilos para os badges de status
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 500;
+
+  .status-icon {
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+    margin-right: 4px;
+  }
+
+  &.status-agendado {
+    background-color: #e3f2fd;
+    color: #1976d2;
+  }
+
+  &.status-confirmado {
+    background-color: #e8f5e9;
+    color: #388e3c;
+  }
+
+  &.status-finalizado {
+    background-color: #e0f2f1;
+    color: #00897b;
+  }
+
+  &.status-cancelado {
+    background-color: #ffebee;
+    color: #d32f2f;
+  }
+}
+
+// Responsividade
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+
+    .header-actions {
+      width: 100%;
+      justify-content: flex-start;
+    }
+  }
+
+  .filter-options,
+  .date-range-filter {
+    flex-direction: column;
+
+    mat-form-field {
+      width: 100%;
+    }
+  }
+
+  .clients-table-container,
+  .appointments-table-container {
+    overflow-x: auto;
+  }
+
+  .mat-column-medicalConditions,
+  .mat-column-procedures {
+    max-width: 150px;
+  }
+}
+
+// Estilo responsivo para mobile (menos de 576px)
+@media (max-width: 576px) {
+  .search-card {
+    .filter-options {
+      flex-direction: column;
+
+      mat-form-field {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// Estilos para o layout super compacto das informações médicas
+.medical-info-compact-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  font-size: 12px;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+  padding: 5px 8px;
+  border-radius: 4px;
+  width: 100%;
+
+  // Estilo para quando há condições importantes
+  &.important {
+    background-color: #fff8e1; // Amarelo claro de alerta
+    border-left: 3px solid #ffc107; // Borda amarela
+  }
+
+  .alert-icon {
+    margin-right: 8px;
+    font-size: 14px;
+    color: #ff9800;
+
+    span {
+      cursor: help;
+    }
+  }
+
+  .condition-block {
+    display: flex;
+    align-items: center;
+
+    &:not(:last-child):after {
+      content: '|';
+      color: #bdbdbd;
+      margin-left: 8px;
+    }
+
+    .mini-title {
+      font-weight: 500;
+      color: #455a64;
+      margin-right: 4px;
+      font-size: 11px;
+    }
+
+    .present-list {
+      color: #2e7d32;
+    }
+
+    .absent-list {
+      color: #757575;
+      font-style: italic;
+    }
+
+    &.notes-block {
+      .notes-text {
+        font-style: italic;
+        color: #546e7a;
+      }
+    }
+  }
+}
+
+.empty-info-mini {
+  font-style: italic;
+  color: #9e9e9e;
+  font-size: 12px;
+  padding: 5px 8px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.medical-error-mini {
+  color: #f44336;
+  font-size: 12px;
+  padding: 5px 8px;
+  background-color: #ffebee;
+  border-radius: 4px;
+}
+
+.no-medical-info {
+  font-style: italic;
+  color: #9e9e9e;
+  font-size: 12px;
+  padding: 5px 8px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+// Ajustes específicos para a tabela de agendamentos
+.appointments-table {
+  .mat-column-medicalInfo {
+    max-width: 280px;
+    min-width: 200px;
+  }
+}
+
+.page-title {
+  margin-bottom: 0;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  .history-button,
+  .audit-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .history-button {
+    background-color: #3f51b5;
+    color: white;
+  }
+
+  .audit-button {
+    background-color: #f44336;
+    color: white;
+  }
+}
+
+.emergency-button {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: #d32f2f;
+  color: white;
+  font-weight: bold;
+  padding: 8px 16px;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+
+  mat-icon {
+    margin-right: 8px;
+  }
+
+  &:hover {
+    background-color: #b71c1c;
+  }
+}
+
+.filter-controls {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}

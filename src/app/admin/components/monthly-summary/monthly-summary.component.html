@@ -1,0 +1,68 @@
+<div class="container">
+  <div class="header">
+    <h1>Resumo Mensal - {{ monthYearDisplay }}</h1>
+    <button mat-stroked-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Voltar ao Dashboard
+    </button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-spinner">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Carregando resumo mensal...</p>
+  </div>
+
+  <div *ngIf="!isLoading && monthlyReport">
+    <mat-card class="summary-card total-income-card">
+      <mat-card-content class="total-income-content">
+        <mat-icon>monetization_on</mat-icon>
+        <div class="total-income-text">
+          <span>Faturamento Total (Atendimentos):</span>
+          <span class="total-income-value">
+            R$ {{ monthlyReport.totalAppointmentIncome | number: '1.2-2' }}
+          </span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <div
+      class="stats-section podologist-monthly-stats"
+      *ngIf="monthlyReport.podologistStats.length > 0"
+    >
+      <h2>Faturamento por Podóloga</h2>
+      <div class="card-grid">
+        <mat-card *ngFor="let stats of monthlyReport.podologistStats">
+          <mat-card-header>
+            <div mat-card-avatar><mat-icon>person</mat-icon></div>
+            <mat-card-title>{{ stats.name }}</mat-card-title>
+            <mat-card-subtitle>{{ stats.appointmentCount }} atendimento(s)</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="podologist-total">
+              Total Faturado: R$ {{ stats.totalRevenue | number: '1.2-2' }}
+            </p>
+
+            <div class="procedures-section" *ngIf="stats.procedures && stats.procedures.length > 0">
+              <h3>Procedimentos Realizados:</h3>
+              <div class="procedures-list">
+                <div class="procedure-item" *ngFor="let proc of stats.procedures">
+                  <span class="procedure-abbr">{{ proc.abbreviation }}</span>
+                  <span class="procedure-count">{{ proc.count }}x</span>
+                  <span class="procedure-name" [title]="proc.name">{{ proc.name }}</span>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <div *ngIf="monthlyReport.podologistStats.length === 0 && !isLoading" class="no-data">
+      <p>Nenhum atendimento registrado para este mês.</p>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && !monthlyReport" class="no-data">
+    <p>Não foi possível carregar o resumo mensal.</p>
+  </div>
+</div>

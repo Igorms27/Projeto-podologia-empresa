@@ -1,0 +1,285 @@
+<div class="agenda-container">
+  <div class="agenda-header">
+    <h1>AGENDA</h1>
+    <div class="date-nav">
+      <button mat-icon-button (click)="previousDay()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Data</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          [(ngModel)]="selectedDate"
+          (dateChange)="onDateChange()"
+          [matDatepickerFilter]="dateFilter"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <button mat-icon-button (click)="nextDay()">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+
+      <!-- Botão para forçar recarga dos agendamentos -->
+      <button
+        mat-icon-button
+        color="accent"
+        (click)="forceReloadAgendamentos()"
+        matTooltip="Forçar recarga dos agendamentos"
+        style="margin-left: 10px"
+      >
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+    <div class="month-year">{{ currentMonth }} {{ currentYear }}</div>
+  </div>
+
+  <div class="agenda-grid" *ngIf="!loading">
+    <div class="agenda-table">
+      <!-- Cabeçalho da tabela com nomes das podólogas -->
+      <div class="agenda-table-header">
+        <div class="header-cell"></div>
+        <!-- Célula vazia para o canto superior esquerdo -->
+        <div class="header-cell" *ngFor="let podologa of podologasDisplay">
+          {{ podologa.nome }}
+        </div>
+      </div>
+
+      <!-- Linhas do horário -->
+      <div class="agenda-row" *ngFor="let time of timeSlots">
+        <div class="time-cell">
+          {{ time }}
+        </div>
+
+        <!-- Uma célula para cada podóloga neste horário -->
+        <div
+          class="appointment-cell"
+          *ngFor="let podologa of podologasDisplay"
+          [class.occupied]="getAppointmentsForTimeAndPodologa(time, podologa.id).length > 0"
+          [class.unavailable]="availableTimeSlots[time] === false"
+          (click)="
+            getAppointmentsForTimeAndPodologa(time, podologa.id).length === 0 &&
+            availableTimeSlots[time] !== false
+              ? openNovoAgendamento(time, podologa.id)
+              : showOccupiedMessage(time)
+          "
+        >
+          <!-- Agendamento existente - Exibição forte com bordas -->
+          <div
+            class="appointment-item"
+            *ngFor="let appointment of getAppointmentsForTimeAndPodologa(time, podologa.id)"
+            style="
+              background-color: rgba(0, 0, 0, 0.7);
+              color: white;
+              padding: 10px;
+              margin-bottom: 5px;
+              border-radius: 5px;
+              box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+              border: 2px solid rgba(0, 0, 0, 0.9);
+            "
+          >
+            <div style="font-weight: bold; font-size: 16px; margin-bottom: 3px">
+              {{ appointment.clientName || 'Cliente' }}
+            </div>
+            <div style="font-size: 13px">
+              <span>{{
+                appointment.procedureNames && appointment.procedureNames.length > 0
+                  ? appointment.procedureNames[0]
+                  : 'Procedimento'
+              }}</span>
+            </div>
+
+            <!-- Status de Finalizado -->
+            <div
+              *ngIf="appointment.status === 'finalizado'"
+              style="
+                background-color: #28a745;
+                color: white;
+                padding: 3px 8px;
+                border-radius: 4px;
+                text-align: center;
+                margin-top: 8px;
+                font-weight: bold;
+              "
+            >
+              FINALIZADO
+              <div *ngIf="appointment.paymentMethod" style="font-size: 11px; margin-top: 2px">
+                {{
+                  appointment.paymentMethod === 'dinheiro'
+                    ? 'DINHEIRO'
+                    : appointment.paymentMethod === 'pix'
+                      ? 'PIX'
+                      : 'CARTÃO'
+                }}
+              </div>
+            </div>
+
+            <!-- Botões de ação (apenas se não estiver finalizado) -->
+            <div
+              class="appointment-actions"
+              *ngIf="appointment.status !== 'finalizado'"
+              style="display: flex; justify-content: center; gap: 5px; margin-top: 8px"
+            >
+              <button
+                mat-mini-fab
+                color="warn"
+                style="transform: scale(0.7)"
+                (click)="cancelAppointment(appointment, $event)"
+                matTooltip="Cancelar"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+              <button
+                mat-mini-fab
+                color="primary"
+                style="transform: scale(0.7); background-color: #28a745"
+                (click)="markAsPaid(appointment, $event)"
+                matTooltip="Registrar Pagamento"
+              >
+                <mat-icon>payments</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <!-- Indicador visual se está vazio -->
+          <div
+            class="empty-slot"
+            *ngIf="
+              getAppointmentsForTimeAndPodologa(time, podologa.id).length === 0 &&
+              availableTimeSlots[time] !== false
+            "
+          >
+            Disponível
+          </div>
+
+          <!-- Indicador visual se está globalmente indisponível -->
+          <div
+            class="unavailable-indicator"
+            *ngIf="
+              availableTimeSlots[time] === false &&
+              getAppointmentsForTimeAndPodologa(time, podologa.id).length === 0
+            "
+          >
+            <mat-icon>block</mat-icon>
+            <span>Indisponível</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="agenda-loading" *ngIf="loading">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Carregando agenda...</p>
+  </div>
+
+  <!-- Overlay de verificação da disponibilidade -->
+  <div class="availability-checking-overlay" *ngIf="checkingAvailability">
+    <div class="overlay-content">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Verificando disponibilidade...</p>
+    </div>
+  </div>
+
+  <div class="agenda-notes-section">
+    <div class="expense-grid">
+      <mat-card class="expense-form-card">
+        <mat-card-header>
+          <mat-card-title>Controle de Despesas Diárias</mat-card-title>
+          <mat-card-subtitle
+            >Registre despesas para o dia {{ selectedDate | date: 'dd/MM/yyyy' }}</mat-card-subtitle
+          >
+        </mat-card-header>
+        <mat-card-content>
+          <form>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Descrição da despesa</mat-label>
+              <input
+                matInput
+                placeholder="Ex: Material de escritório, pagamentos, etc."
+                [(ngModel)]="expenseDescription"
+                name="description"
+                required
+              />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Categoria</mat-label>
+              <mat-select [(ngModel)]="expenseCategory" name="category" required>
+                <mat-option value="material">Material de Consumo</mat-option>
+                <mat-option value="escritorio">Material de Escritório</mat-option>
+                <mat-option value="equipamento">Equipamentos</mat-option>
+                <mat-option value="manutencao">Manutenção</mat-option>
+                <mat-option value="servicos">Serviços</mat-option>
+                <mat-option value="outros">Outros</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Valor (R$)</mat-label>
+              <input
+                matInput
+                type="number"
+                placeholder="0.00"
+                [(ngModel)]="expenseAmount"
+                name="amount"
+                min="0.01"
+                step="0.01"
+                required
+              />
+              <span matPrefix>R$&nbsp;</span>
+            </mat-form-field>
+
+            <div *ngIf="expenseMessage" class="expense-message">
+              {{ expenseMessage }}
+            </div>
+          </form>
+        </mat-card-content>
+        <mat-card-actions align="end">
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="!expenseDescription || !expenseAmount || !expenseCategory"
+            (click)="registerExpense()"
+          >
+            <mat-icon>save</mat-icon>
+            Registrar Despesa
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+      <mat-card class="expense-list-card" *ngIf="dailyReport">
+        <mat-card-header>
+          <mat-card-title>Despesas do Dia</mat-card-title>
+          <mat-card-subtitle
+            >Total: R$ {{ dailyReport.totalExpense | number: '1.2-2' }}</mat-card-subtitle
+          >
+        </mat-card-header>
+        <mat-card-content>
+          <div class="expense-list">
+            <div *ngIf="dailyReport.expenses.length === 0" class="no-expenses">
+              Nenhuma despesa registrada para hoje.
+            </div>
+            <div *ngFor="let expense of dailyReport.expenses" class="expense-item">
+              <div class="expense-info">
+                <div class="expense-description">
+                  {{ expense.description }}
+                </div>
+                <div class="expense-category" *ngIf="expense.expenseCategory">
+                  <mat-chip>{{ getCategoryLabel(expense.expenseCategory) }}</mat-chip>
+                </div>
+                <div class="expense-amount">R$ {{ expense.amount | number: '1.2-2' }}</div>
+              </div>
+              <div class="expense-time">
+                {{ expense.date | date: 'HH:mm' }}
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

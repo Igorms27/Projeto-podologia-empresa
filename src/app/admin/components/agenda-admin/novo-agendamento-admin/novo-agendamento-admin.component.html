@@ -1,0 +1,139 @@
+<h2 mat-dialog-title>Novo Agendamento</h2>
+
+<mat-dialog-content>
+  <div class="appointment-form">
+    <div class="form-header">
+      <div class="date-display">
+        <mat-icon>event</mat-icon>
+        <span>{{ data.date | date: 'dd/MM/yyyy' }}</span>
+      </div>
+      <div class="time-display">
+        <mat-icon>access_time</mat-icon>
+        <span>{{ data.date | date: 'HH:mm' }}</span>
+      </div>
+    </div>
+
+    <div class="form-fields">
+      <!-- Seção de seleção de cliente simplificada -->
+      <div class="client-selection-section">
+        <h3>Cliente</h3>
+
+        <!-- Única caixa de pesquisa para clientes -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nome do cliente</mat-label>
+          <input
+            matInput
+            [(ngModel)]="clientName"
+            placeholder="Digite nome do cliente para buscar ou cadastrar"
+            (input)="filterClients($event)"
+            required
+          />
+          <mat-icon matSuffix>search</mat-icon>
+          <mat-hint *ngIf="!selectedClient"
+            >Cliente não cadastrado? Use o nome digitado para o agendamento.</mat-hint
+          >
+        </mat-form-field>
+
+        <!-- Lista de clientes encontrados -->
+        <div
+          class="client-list"
+          *ngIf="clientName && filteredClients.length > 0 && !selectedClient"
+        >
+          <div
+            class="client-item"
+            *ngFor="let client of filteredClients"
+            (click)="selectClient(client)"
+          >
+            <strong>{{ client.name }}</strong>
+            <div class="client-info">
+              <span *ngIf="client.cpf">CPF: {{ client.cpf }}</span>
+              <span *ngIf="client.phone">Tel: {{ client.phone }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Indicador de carregamento -->
+        <div class="loading-clients" *ngIf="loadingClients">
+          <span>Carregando clientes...</span>
+        </div>
+
+        <!-- Cliente selecionado -->
+        <div class="selected-client" *ngIf="selectedClient">
+          <h4>Cliente selecionado:</h4>
+          <div class="client-details">
+            <span
+              ><strong>{{ selectedClient.name }}</strong></span
+            >
+            <span *ngIf="selectedClient.cpf">CPF: {{ selectedClient.cpf }}</span>
+            <span *ngIf="selectedClient.phone">Tel: {{ selectedClient.phone }}</span>
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="clearClientSelection()"
+              matTooltip="Remover seleção"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Procedimento</mat-label>
+        <mat-select
+          [(ngModel)]="selectedProcedure"
+          (selectionChange)="onProcedureChange()"
+          required
+        >
+          <mat-option *ngFor="let procedure of procedures" [value]="procedure">
+            {{ procedure.name }}
+          </mat-option>
+        </mat-select>
+        <mat-icon matSuffix>medical_services</mat-icon>
+      </mat-form-field>
+
+      <!-- Novo campo para inserir o valor manualmente -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Valor (R$)</mat-label>
+        <input
+          matInput
+          [(ngModel)]="customPrice"
+          type="number"
+          placeholder="Digite o valor do procedimento"
+          required
+        />
+        <mat-icon matSuffix>attach_money</mat-icon>
+      </mat-form-field>
+
+      <div class="podologa-display">
+        <mat-icon>person_pin</mat-icon>
+        <span class="label">Podóloga:</span>
+        <span class="value">{{ data.podologaNome }}</span>
+      </div>
+    </div>
+
+    <div class="appointment-details" *ngIf="selectedProcedure">
+      <div class="detail-item">
+        <span class="label">Valor:</span>
+        <span class="value">R$ {{ customPrice || 0 }},00</span>
+      </div>
+    </div>
+
+    <div class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="loading">Cancelar</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onConfirm()"
+    [disabled]="!isFormValid() || loading"
+  >
+    <mat-icon>save</mat-icon>
+    Confirmar
+  </button>
+</mat-dialog-actions>

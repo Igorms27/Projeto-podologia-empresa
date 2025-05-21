@@ -1,0 +1,55 @@
+.angular
+dist
+node_modules
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/
+.history/*
+
+# Cursor
+.cursor/
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Environment files
+/src/environments/*.js
+/src/environments/*.local.ts
+.env
+.env.*
+!.env.example
+
+# Firebase
+.firebaserc
+firebase-debug.log
+firebase-debug.*.log
+firebase.json
+
+# Logs
+*.log
+logs

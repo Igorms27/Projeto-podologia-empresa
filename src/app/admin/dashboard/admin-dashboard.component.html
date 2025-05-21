@@ -1,0 +1,211 @@
+<div class="admin-dashboard-container">
+  <!-- Cabeçalho do Dashboard -->
+  <div class="dashboard-header">
+    <h1 class="page-title">Painel Administrativo</h1>
+    <div class="action-buttons">
+      <!-- Botão de Caixa visível para administradores E funcionários -->
+      @if (isAdmin() || isFuncionario()) {
+        <button mat-raised-button color="primary" class="cashier-button" (click)="openCashier()">
+          <mat-icon>payments</mat-icon>
+          Caixa
+        </button>
+      }
+      <!-- Botão de relatório mensal visível apenas para administradores -->
+      @if (isAdmin()) {
+        <button
+          mat-raised-button
+          color="primary"
+          class="monthly-report-button"
+          (click)="openMonthlyReport()"
+        >
+          <mat-icon>calendar_month</mat-icon>
+          Relatório Mensal
+        </button>
+      }
+      <!-- Botões visíveis para todos -->
+      <button mat-raised-button color="primary" class="agenda-button" (click)="openAgenda()">
+        <mat-icon>event</mat-icon>
+        Agenda
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="register-client-button"
+        (click)="openRegisterClient()"
+      >
+        <mat-icon>person_add</mat-icon>
+        Cadastrar Cliente
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="history-button"
+        (click)="openClientHistory()"
+      >
+        <mat-icon>history</mat-icon>
+        Histórico do Cliente
+      </button>
+    </div>
+  </div>
+
+  <!-- Tab para alternar entre clientes e agendamentos -->
+  <mat-card>
+    <mat-card-content>
+      <mat-tab-group>
+        <mat-tab label="Clientes">
+          <!-- Conteúdo da aba de clientes -->
+          <ng-container *ngTemplateOutlet="clientesTab"></ng-container>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Template para a aba de clientes -->
+  <ng-template #clientesTab>
+    <!-- Filtros de Clientes -->
+    <mat-card class="clients-filter-card">
+      <mat-card-header>
+        <mat-card-title>Filtrar Clientes</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="search-container">
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Buscar clientes</mat-label>
+            <input
+              matInput
+              [(ngModel)]="searchQuery"
+              (keyup)="applyFilters()"
+              placeholder="Busque por nome, e-mail ou CPF"
+            />
+            <button
+              *ngIf="searchQuery"
+              matSuffix
+              mat-icon-button
+              aria-label="Limpar"
+              (click)="searchQuery = ''; applyFilters()"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-icon matSuffix *ngIf="!searchQuery">search</mat-icon>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Tabela de Clientes -->
+    <div class="clients-table-container">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        (matSortChange)="sortData($event)"
+        class="clients-table"
+      >
+        <!-- Nome Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome</th>
+          <td mat-cell *matCellDef="let client">{{ client.name }}</td>
+        </ng-container>
+
+        <!-- CPF Column -->
+        <ng-container matColumnDef="cpf">
+          <th mat-header-cell *matHeaderCellDef>CPF</th>
+          <td mat-cell *matCellDef="let client">
+            {{ client.cpf | mask: '000.000.000-00' }}
+          </td>
+        </ng-container>
+
+        <!-- Email Column -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>E-mail</th>
+          <td mat-cell *matCellDef="let client">{{ client.email }}</td>
+        </ng-container>
+
+        <!-- Telefone Column -->
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef>Telefone</th>
+          <td mat-cell *matCellDef="let client">
+            {{ client.phone | mask: '(00) 00000-0000' }}
+          </td>
+        </ng-container>
+
+        <!-- Data de Cadastro Column -->
+        <ng-container matColumnDef="registrationDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Data de Cadastro</th>
+          <td mat-cell *matCellDef="let client">
+            {{ client.registrationDate | date: 'dd/MM/yyyy' }}
+          </td>
+        </ng-container>
+
+        <!-- Última Modificação Column -->
+        <ng-container matColumnDef="lastModified">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Última Modificação</th>
+          <td mat-cell *matCellDef="let client">
+            {{ client.lastModified | date: 'dd/MM/yyyy HH:mm' }}
+          </td>
+        </ng-container>
+
+        <!-- Observações Médicas Column -->
+        <ng-container matColumnDef="medicalConditions">
+          <th mat-header-cell *matHeaderCellDef>Observações Médicas</th>
+          <td mat-cell *matCellDef="let client">
+            <div *ngIf="client.medicalInfo">
+              <span *ngIf="client.medicalInfo.diabetes" class="medical-condition">
+                <mat-icon color="warn">local_hospital</mat-icon>
+                Diabetes
+              </span>
+              <span *ngIf="client.medicalInfo.hypertension" class="medical-condition">
+                <mat-icon color="warn">local_hospital</mat-icon>
+                Hipertensão
+              </span>
+              <span *ngIf="client.medicalInfo.vascularDisease" class="medical-condition">
+                <mat-icon color="warn">local_hospital</mat-icon>
+                Doença Vascular
+              </span>
+              <span *ngIf="client.medicalInfo.chemicalAllergies" class="allergy-condition">
+                <mat-icon color="warn">warning</mat-icon>
+                Alergias: {{ client.medicalInfo.allergiesDescription }}
+              </span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Ações Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Ações</th>
+          <td mat-cell *matCellDef="let client">
+            <button mat-icon-button [matMenuTriggerFor]="clientActionsMenu" aria-label="Ações">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #clientActionsMenu="matMenu">
+              <button mat-menu-item (click)="viewClientDetails(client)">
+                <mat-icon>visibility</mat-icon>
+                <span>Ver Detalhes</span>
+              </button>
+              <button mat-menu-item (click)="deleteClient(client)" color="warn">
+                <mat-icon color="warn">delete</mat-icon>
+                <span>Excluir</span>
+              </button>
+            </mat-menu>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+        <!-- Linha para exibir quando não há dados -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="7">Nenhum cliente encontrado com os filtros atuais</td>
+        </tr>
+      </table>
+
+      <mat-paginator
+        [length]="totalClients"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 25, 50]"
+        (page)="onPageChange($event)"
+      >
+      </mat-paginator>
+    </div>
+  </ng-template>
+</div>

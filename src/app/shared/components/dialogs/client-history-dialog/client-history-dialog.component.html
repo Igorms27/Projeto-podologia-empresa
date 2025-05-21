@@ -1,0 +1,194 @@
+<!-- Template de diálogo para visualização do histórico do cliente -->
+<h2 mat-dialog-title>Histórico do Cliente</h2>
+
+<mat-dialog-content>
+  <!-- Seção de pesquisa -->
+  <div class="search-container">
+    <mat-form-field class="search-field" appearance="outline">
+      <mat-label>Buscar cliente</mat-label>
+      <input
+        matInput
+        placeholder="Digite o nome ou telefone"
+        [formControl]="searchControl"
+        (keyup.enter)="searchClients()"
+      />
+      <mat-icon matPrefix>search</mat-icon>
+      <mat-hint>Pressione Enter para buscar</mat-hint>
+    </mat-form-field>
+  </div>
+
+  <!-- Estado de carregamento -->
+  <div *ngIf="isSearching" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Buscando clientes...</p>
+  </div>
+
+  <!-- Mensagem quando não há resultados -->
+  <div *ngIf="!isSearching && clients.length === 0 && searchPerformed" class="no-results">
+    <mat-icon>search_off</mat-icon>
+    <h3>Nenhum cliente encontrado</h3>
+    <p>Tente um termo de busca diferente ou verifique se o cliente está cadastrado.</p>
+  </div>
+
+  <!-- Lista de clientes encontrados -->
+  <div *ngIf="!isSearching && clients.length > 0 && !selectedClient" class="client-list">
+    <mat-card class="client-card" *ngFor="let client of clients" (click)="selectClient(client)">
+      <mat-card-content>
+        <h3 class="client-name">{{ client.name }}</h3>
+        <div class="client-details">
+          <p class="detail-item" *ngIf="client.phone">
+            <mat-icon class="info-icon">phone</mat-icon> {{ client.phone }}
+          </p>
+          <p class="detail-item" *ngIf="client.email">
+            <mat-icon class="info-icon">email</mat-icon> {{ client.email }}
+          </p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Detalhes do cliente selecionado e seu histórico -->
+  <div *ngIf="selectedClient" class="client-history-container">
+    <div class="client-header">
+      <div>
+        <h2 class="client-name">{{ selectedClient.name }}</h2>
+        <div class="client-details">
+          <p class="detail-item" *ngIf="selectedClient.phone">
+            <mat-icon class="info-icon">phone</mat-icon> {{ selectedClient.phone }}
+          </p>
+          <p class="detail-item" *ngIf="selectedClient.email">
+            <mat-icon class="info-icon">email</mat-icon> {{ selectedClient.email }}
+          </p>
+          <p class="detail-item" *ngIf="selectedClient.cpf">
+            <mat-icon class="info-icon">badge</mat-icon> {{ selectedClient.cpf }}
+          </p>
+        </div>
+      </div>
+
+      <button mat-stroked-button color="primary" (click)="returnToSearch()">
+        <mat-icon>arrow_back</mat-icon> Voltar
+      </button>
+    </div>
+
+    <!-- Carregando histórico -->
+    <div *ngIf="loadingHistory" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Carregando histórico...</p>
+    </div>
+
+    <!-- Sem histórico -->
+    <div *ngIf="!loadingHistory && getAppointments().length === 0" class="no-results">
+      <mat-icon>event_busy</mat-icon>
+      <h3>Sem histórico de atendimentos</h3>
+      <p>Este cliente ainda não possui atendimentos registrados.</p>
+
+      <!-- Mensagem explicativa adicional -->
+      <div class="info-box">
+        <p>Possíveis motivos:</p>
+        <ul>
+          <li>Cliente recém-cadastrado sem atendimentos</li>
+          <li>Atendimentos registrados com outro ID de cliente</li>
+          <li>Erro na consulta ao banco de dados</li>
+        </ul>
+
+        <!-- Informações de depuração -->
+        <div class="debug-info" *ngIf="selectedClient">
+          <p><strong>ID do cliente:</strong> {{ selectedClient.id }}</p>
+          <p><strong>Nome:</strong> {{ selectedClient.name }}</p>
+          <p>
+            Se esse cliente realizou algum procedimento recentemente e não está aparecendo aqui,
+            entre em contato com o suporte técnico.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs de histórico -->
+    <mat-tab-group *ngIf="!loadingHistory && getAppointments().length > 0" class="history-tabs">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">check_circle</mat-icon>
+          Atendimentos Finalizados ({{ getCompletedAppointments().length }})
+        </ng-template>
+
+        <div class="appointments-list">
+          <mat-expansion-panel
+            class="appointment-card"
+            *ngFor="let appointment of getCompletedAppointments()"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title class="appointment-title">
+                {{ formatDate(appointment.dateTime) }} -
+                {{ appointment.time || appointment.horario }}
+              </mat-panel-title>
+              <mat-panel-description>
+                <span class="status-chip status-finalizado">
+                  <mat-icon>check_circle</mat-icon> Finalizado
+                </span>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <div class="appointment-info">
+              <p>
+                <strong>Procedimento:</strong>
+                {{ appointment.procedure?.name || appointment.procedimento }}
+              </p>
+              <p>
+                <strong>Podólogo:</strong> {{ appointment.podologa?.name || appointment.podologo }}
+              </p>
+              <p><strong>Valor:</strong> {{ appointment.valor | currency: 'BRL' }}</p>
+              <p *ngIf="appointment.observations || appointment.observacoes">
+                <strong>Observações:</strong>
+                {{ appointment.observations || appointment.observacoes }}
+              </p>
+            </div>
+          </mat-expansion-panel>
+        </div>
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">cancel</mat-icon>
+          Atendimentos Cancelados ({{ getCancelledAppointments().length }})
+        </ng-template>
+
+        <div class="appointments-list">
+          <mat-expansion-panel
+            class="appointment-card"
+            *ngFor="let appointment of getCancelledAppointments()"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title class="appointment-title">
+                {{ formatDate(appointment.dateTime) }} -
+                {{ appointment.time || appointment.horario }}
+              </mat-panel-title>
+              <mat-panel-description>
+                <span class="status-chip status-cancelado">
+                  <mat-icon>cancel</mat-icon> Cancelado
+                </span>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <div class="appointment-info">
+              <p>
+                <strong>Procedimento:</strong>
+                {{ appointment.procedure?.name || appointment.procedimento }}
+              </p>
+              <p>
+                <strong>Podólogo:</strong> {{ appointment.podologa?.name || appointment.podologo }}
+              </p>
+              <p *ngIf="appointment.cancelReason || appointment.motivoCancelamento">
+                <strong>Motivo do cancelamento:</strong>
+                {{ appointment.cancelReason || appointment.motivoCancelamento || 'Não informado' }}
+              </p>
+            </div>
+          </mat-expansion-panel>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="primary" mat-dialog-close>Fechar</button>
+</mat-dialog-actions>

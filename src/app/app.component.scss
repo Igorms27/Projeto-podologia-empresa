@@ -1,0 +1,138 @@
+.toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.custom-toolbar {
+  background-color: #f4c430;
+  color: #000000;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.site-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.user-role-indicator {
+  margin-left: 6px;
+
+  small {
+    font-size: 0.7rem;
+    font-weight: 500;
+    opacity: 0.8;
+    color: #333;
+    text-transform: uppercase;
+  }
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.menu-button {
+  display: none;
+}
+
+mat-sidenav-container {
+  min-height: calc(100vh - 64px);
+  margin-top: 64px;
+}
+
+.sidenav {
+  width: 250px;
+  background-color: #fff8dc;
+}
+
+.sidenav-content {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.admin-section {
+  margin: 8px 0;
+
+  .admin-section-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+    padding: 8px 16px;
+    margin: 0;
+  }
+}
+
+.sidenav-content a,
+.sidenav-content button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+  color: #000000;
+  width: 100%;
+  text-align: left;
+  padding: 12px 16px;
+}
+
+.sidenav-content mat-icon {
+  margin-right: 8px;
+}
+
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.desktop-menu a,
+.desktop-menu button {
+  color: #000000;
+}
+
+.desktop-menu button mat-icon {
+  margin-right: 8px;
+}
+
+.desktop-menu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mat-menu-item mat-icon {
+  margin-right: 8px;
+}
+
+@media (max-width: 768px) {
+  .desktop-menu {
+    display: none;
+  }
+
+  .menu-button {
+    display: block;
+  }
+
+  mat-sidenav-container {
+    margin-top: 56px;
+  }
+
+  .site-title {
+    font-size: 1rem;
+  }
+
+  .logo {
+    height: 30px;
+  }
+
+  .sidenav {
+    width: 80%;
+    max-width: 300px;
+  }
+}

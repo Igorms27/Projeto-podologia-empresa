@@ -1,0 +1,416 @@
+.agenda-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.agenda-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .date-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .month-year {
+    font-size: 18px;
+    font-weight: 500;
+  }
+}
+
+.agenda-grid {
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+
+.agenda-table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.agenda-table-header {
+  display: table-row;
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.header-cell {
+  display: table-cell;
+  padding: 12px 8px;
+  text-align: center;
+  border: 1px solid #ddd;
+  font-size: 16px;
+}
+
+.agenda-row {
+  display: table-row;
+  height: 60px;
+}
+
+.time-cell {
+  display: table-cell;
+  padding: 8px;
+  text-align: center;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  font-weight: bold;
+  width: 80px;
+  vertical-align: middle;
+}
+
+.appointment-cell {
+  display: table-cell;
+  position: relative;
+  min-height: 60px;
+  height: 60px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  padding: 5px;
+  transition: background-color 0.2s;
+  vertical-align: top;
+  overflow: visible;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+
+  &.occupied {
+    background-color: #f8f8f8;
+  }
+
+  &.unavailable {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+  }
+
+  .appointment-item {
+    background-color: #e3f2fd;
+    border-radius: 4px;
+    padding: 8px;
+    margin-bottom: 4px;
+    border-left: 4px solid #1976d2;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 2;
+
+    .appointment-client {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 2px;
+      color: #333;
+    }
+
+    .appointment-procedure {
+      font-size: 12px;
+      color: #555;
+      margin-bottom: 2px;
+    }
+
+    .appointment-details {
+      font-size: 11px;
+      color: #666;
+      font-style: italic;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .empty-slot {
+    color: #aaa;
+    font-size: 12px;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+  }
+
+  .occupied-indicator {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    font-size: 10px;
+    color: #1976d2;
+    display: flex;
+    align-items: center;
+    z-index: 1;
+
+    mat-icon {
+      font-size: 14px;
+      height: 14px;
+      width: 14px;
+      margin-right: 2px;
+    }
+
+    span {
+      display: inline-block;
+    }
+  }
+
+  .unavailable-indicator {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    font-size: 10px;
+    color: #757575;
+    z-index: 1;
+
+    mat-icon {
+      font-size: 14px;
+      height: 14px;
+      width: 14px;
+      margin-right: 2px;
+    }
+
+    span {
+      display: inline-block;
+    }
+  }
+}
+
+.agenda-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+
+  p {
+    margin-top: 16px;
+    color: #666;
+  }
+}
+
+.agenda-notes {
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+
+  .notes-section {
+    h3 {
+      margin-top: 0;
+      font-size: 16px;
+      color: #555;
+    }
+
+    textarea {
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 8px;
+      resize: vertical;
+
+      &:focus {
+        outline: none;
+        border-color: #2196f3;
+      }
+    }
+  }
+}
+
+.agenda-notes-section {
+  margin: 20px 0;
+
+  .expense-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+
+    @media (min-width: 992px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .expense-form-card {
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+
+    mat-card-header {
+      margin-bottom: 16px;
+
+      mat-card-title {
+        font-size: 1.5rem;
+        color: #3f51b5;
+      }
+
+      mat-card-subtitle {
+        font-size: 1rem;
+        color: #666;
+      }
+    }
+
+    mat-card-content form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+
+      mat-form-field {
+        flex: 1 1 100%;
+
+        @media (min-width: 768px) {
+          &:nth-child(1) {
+            flex: 1 1 100%;
+          }
+
+          &:nth-child(2),
+          &:nth-child(3) {
+            flex: 1 1 calc(50% - 8px);
+          }
+        }
+      }
+    }
+  }
+
+  .expense-list-card {
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+
+    mat-card-title {
+      font-size: 1.5rem;
+      color: #f44336;
+    }
+
+    .expense-list {
+      max-height: 400px;
+      overflow-y: auto;
+
+      .no-expenses {
+        padding: 20px;
+        text-align: center;
+        color: #666;
+        font-style: italic;
+      }
+
+      .expense-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .expense-info {
+          flex: 1;
+
+          .expense-description {
+            font-weight: 500;
+            margin-bottom: 4px;
+          }
+
+          .expense-category {
+            margin: 6px 0;
+
+            mat-chip {
+              font-size: 0.85rem;
+              height: 24px;
+              background-color: #f5f5f5;
+            }
+          }
+
+          .expense-amount {
+            font-weight: 700;
+            color: #f44336;
+          }
+        }
+
+        .expense-time {
+          color: #999;
+          font-size: 0.9rem;
+          align-self: flex-start;
+        }
+      }
+    }
+  }
+
+  .full-width {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .expense-message {
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 4px;
+    color: #3f51b5;
+    background-color: rgba(63, 81, 181, 0.1);
+    font-weight: 500;
+    border-left: 4px solid #3f51b5;
+    transition: all 0.3s ease;
+  }
+
+  mat-card-actions {
+    padding: 0 16px 16px;
+
+    button {
+      transition: all 0.2s ease;
+
+      &:hover:not([disabled]) {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+}
+
+/* Estilo para snackbar de erro */
+::ng-deep .error-snackbar {
+  background-color: #f44336;
+  color: white;
+
+  .mat-simple-snackbar-action {
+    color: white;
+  }
+}
+
+/* Overlay de verificação de disponibilidade */
+.availability-checking-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .overlay-content {
+    background-color: white;
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+
+    p {
+      font-size: 16px;
+      font-weight: 500;
+      margin: 0;
+      color: #333;
+    }
+  }
+}

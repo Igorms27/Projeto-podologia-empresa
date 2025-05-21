@@ -1,0 +1,140 @@
+<div class="register-client-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Cadastrar Novo Cliente</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Nome Completo</mat-label>
+            <input matInput formControlName="name" required />
+            <mat-error *ngIf="clientForm.get('name')?.hasError('required')">
+              Nome é obrigatório
+            </mat-error>
+            <mat-error *ngIf="clientForm.get('name')?.hasError('minlength')">
+              Nome deve ter pelo menos 3 caracteres
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>CPF</mat-label>
+            <input matInput formControlName="cpf" required mask="000.000.000-00" />
+            <mat-error *ngIf="clientForm.get('cpf')?.hasError('required')">
+              CPF é obrigatório
+            </mat-error>
+            <mat-error *ngIf="clientForm.get('cpf')?.hasError('pattern')">
+              CPF deve conter 11 dígitos
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>E-mail</mat-label>
+            <input matInput formControlName="email" />
+            <mat-error *ngIf="clientForm.get('email')?.hasError('email')">
+              E-mail inválido
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Telefone*</mat-label>
+            <input
+              matInput
+              formControlName="phone"
+              required
+              mask="(00) 0000-0000 || (00) 00000-0000"
+            />
+            <mat-error *ngIf="clientForm.get('phone')?.hasError('required')">
+              Telefone é obrigatório
+            </mat-error>
+            <mat-error *ngIf="clientForm.get('phone')?.hasError('pattern')">
+              Telefone inválido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Endereço*</mat-label>
+            <input matInput formControlName="address" required />
+            <mat-error *ngIf="clientForm.get('address')?.hasError('required')">
+              Endereço é obrigatório
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>CEP*</mat-label>
+            <input matInput formControlName="zipCode" required mask="00000-000" />
+            <mat-error *ngIf="clientForm.get('zipCode')?.hasError('required')">
+              CEP é obrigatório
+            </mat-error>
+            <mat-error *ngIf="clientForm.get('zipCode')?.hasError('pattern')">
+              CEP deve conter 8 dígitos numéricos
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Data de Nascimento*</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="birthDate" required />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="clientForm.get('birthDate')?.hasError('required')">
+              Data de nascimento é obrigatória
+            </mat-error>
+          </mat-form-field>
+
+          <div></div>
+        </div>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title> Informações Médicas </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div formGroupName="medicalInfo">
+            <!-- Checkboxes para condições médicas -->
+            <div class="checkbox-group">
+              <mat-checkbox formControlName="diabetes">Diabetes</mat-checkbox>
+              <mat-checkbox formControlName="hypertension">Hipertensão</mat-checkbox>
+              <mat-checkbox formControlName="vascularDisease">Doença Vascular</mat-checkbox>
+              <mat-checkbox formControlName="renalInsufficiency">Insuficiência Renal</mat-checkbox>
+              <mat-checkbox formControlName="hematologicDisorders"
+                >Distúrbios Hematológicos</mat-checkbox
+              >
+              <mat-checkbox formControlName="chemicalAllergies">Alergias Químicas</mat-checkbox>
+            </div>
+
+            <!-- Campo de texto para observações/descrição de alergias -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Observações / Descrição de Alergias</mat-label>
+              <textarea
+                matInput
+                formControlName="allergiesDescription"
+                rows="4"
+                placeholder="Descreva alergias ou outras observações médicas importantes"
+              ></textarea>
+            </mat-form-field>
+          </div>
+        </mat-expansion-panel>
+
+        <div class="button-row">
+          <button mat-button type="button" (click)="onCancel()">Cancelar</button>
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            [disabled]="clientForm.invalid || isLoading"
+          >
+            <mat-icon *ngIf="isLoading">hourglass_empty</mat-icon>
+            {{ isLoading ? 'Cadastrando...' : 'Cadastrar' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
